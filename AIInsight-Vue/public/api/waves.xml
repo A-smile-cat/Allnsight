@@ -1,0 +1,18 @@
+<waves>
+    <wave>
+        <size>100</size>
+        <color>rgba(255, 255, 255, 0.5)</color>
+        <position>
+            <x>30</x>
+            <y>50</y>
+        </position>
+    </wave>
+    <wave>
+        <size>120</size>
+        <color>rgba(255, 255, 255, 0.3)</color>
+        <position>
+            <x>70</x>
+            <y>80</y>
+        </position>
+    </wave>
+</waves>

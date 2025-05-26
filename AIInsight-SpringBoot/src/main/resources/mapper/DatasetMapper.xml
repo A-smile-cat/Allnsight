@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.DatasetMapper">
+
+    <select id="queryAll" resultType="com.example.demo.entity.Datasets">
+        SELECT datasets.*,user.username
+        FROM datasets,user
+        WHERE user.id = datasets.user_id AND user.id = #{uid}
+    </select>
+
+    <select id="queryById" resultType="com.example.demo.entity.Datasets">
+        SELECT datasets.*,user.username
+        FROM datasets,user
+        WHERE user.id = #{uid} AND user.id = datasets.user_id AND datasets.dataset_id = #{dataset_id}
+        LIMIT 1
+    </select>
+
+    <select id="queryByName" resultType="com.example.demo.entity.Datasets">
+        SELECT datasets.*,user.username
+        FROM datasets,user
+        WHERE user.id = #{uid} AND user.id = datasets.user_id AND datasets.name LIKE CONCAT('%', #{name}, '%')
+    </select>
+
+    <select id="queryByStatus" resultType="com.example.demo.entity.Datasets">
+        SELECT datasets.*,user.username
+        FROM datasets,user
+        WHERE user.id = #{uid} AND user.id = datasets.user_id AND datasets.status = #{status}
+    </select>
+
+    <select id="queryByNameAndStatus" resultType="com.example.demo.entity.Datasets">
+        SELECT datasets.*,user.username
+        FROM datasets,user
+        WHERE user.id = #{uid} AND user.id = datasets.user_id AND datasets.name LIKE CONCAT('%', #{name}, '%') AND datasets.status = #{status}
+    </select>
+
+    <insert id="add" parameterType="com.example.demo.entity.Datasets">
+        INSERT INTO datasets(user_id,name,description,status,created_at)
+        VALUES(#{user_id},#{name},#{description},#{status},#{created_at})
+    </insert>
+
+    <update id="update" parameterType="com.example.demo.entity.Datasets">
+        UPDATE datasets
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="file_hash != null">file_hash = #{file_hash},</if>
+            <if test="storage_path != null">storage_path = #{storage_path},</if>
+        </set>
+        WHERE dataset_id = #{dataset_id} AND user_id = #{user_id}
+    </update>
+
+    <update id="updateStatus">
+        UPDATE datasets
+        SET status = #{status}
+        WHERE dataset_id = #{dataset_id} AND user_id = #{uid}
+    </update>
+
+    <update id="updateFile">
+        UPDATE datasets
+        SET status = #{status},storage_path = #{storage_path},file_hash = #{file_hash}
+        WHERE dataset_id = #{dataset_id} AND user_id = #{uid}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM datasets
+        WHERE dataset_id = #{dataset_id} AND user_id = #{uid}
+    </delete>
+</mapper>

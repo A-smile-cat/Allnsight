@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.UserInfoMapper">
+
+    <insert id="add" parameterType="UserInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into demo.user (username, password, salt,email,phone,status)
+        values (#{username},#{password},#{salt},#{email},#{phone},#{status});
+    </insert>
+
+    <delete id="delete" parameterType="Integer">
+        delete from demo.user where id = #{id};
+    </delete>
+
+    <update id="update" parameterType="UserInfo" >
+        update demo.user
+        set username=#{username},phone=#{phone},region=#{region},address= #{address},gender= #{gender},birthday= #{birthday}
+        where id=#{id};
+    </update>
+
+    <update id="updateUser" parameterType="UserInfo">
+        update demo.user
+        set username= #{username},phone= #{phone},email= #{email},role_id= #{role_id}
+        where id= #{id};
+    </update>
+
+    <update id="updatePassword" parameterType="UserInfo" >
+        update demo.user
+        set password=#{password},salt= #{salt}
+        where id=#{id};
+    </update>
+
+    <update id="updateEmail" parameterType="UserInfo" >
+        update demo.user set email=#{email}
+        where id=#{id};
+    </update>
+
+    <update id="updateStatus" parameterType="UserInfo">
+        update demo.user
+        set status= #{status}
+        where id= #{id};
+    </update>
+
+    <update id="updateAccountId" parameterType="UserInfo" >
+        UPDATE demo.user
+        SET account_id = CONCAT('', 10000000 + id)
+        WHERE id = #{id};
+    </update>
+
+    <select id="queryById" parameterType="String" resultType="UserInfo">
+        select * from demo.user where account_id=#{account_id} LIMIT 1;
+    </select>
+
+    <select id="queryByUserName" resultType="UserInfo">
+        select * from demo.user where username=#{username};
+    </select>
+
+    <select id="queryByEmail" resultType="UserInfo">
+        select * from demo.user where email=#{email} LIMIT 1;
+    </select>
+
+    <select id="queryAll" resultType="UserInfo">
+        select * from demo.user;
+    </select>
+
+    <select id="loginVerify" resultType="UserInfo">
+    select * from demo.user
+    where (account_id=#{account_id} or email=#{account_id})
+    LIMIT 1;
+    </select>
+
+    <select id="statusVerify" resultType="Integer">
+        select status from demo.user where id=#{id} LIMIT 1;
+    </select>
+
+    <select id="queryByAccountId" resultType="com.example.demo.entity.UserInfo">
+        select *
+        from demo.user
+        where account_id like concat('%',#{account_id},'%');
+    </select>
+    
+    <select id="queryByUsername2" resultType="com.example.demo.entity.UserInfo">
+            select *
+            from demo.user
+            where username like concat('%',#{username},'%');
+    </select>
+
+    <select id="queryById2" resultType="com.example.demo.entity.UserInfo">
+        select *
+        from demo.user
+        where id=#{id}
+    </select>
+
+</mapper>

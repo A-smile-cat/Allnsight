@@ -1,0 +1,2 @@
+from torchvision.models.segmentation import lraspp_mobilenet_v3_large
+model = lraspp_mobilenet_v3_large(pretrained=True)

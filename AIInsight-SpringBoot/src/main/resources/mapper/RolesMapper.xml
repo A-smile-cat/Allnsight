@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.RolesMapper">
+
+    <select id="queryAll" resultType="com.example.demo.entity.Roles">
+        SELECT *
+        FROM demo.roles
+    </select>
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="role_id">
+        INSERT INTO demo.roles(role_name, description) VALUES (#{role_name}, #{description})
+    </insert>
+
+    <update id="update">
+        UPDATE demo.roles
+        SET role_name = #{role_name}, description = #{description}
+        WHERE role_id = #{role_id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM demo.roles
+        WHERE role_id = #{id}
+    </delete>
+
+</mapper>

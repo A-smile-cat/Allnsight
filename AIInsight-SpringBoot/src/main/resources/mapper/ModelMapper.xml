@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.ModelMapper">
+
+   <insert id="add" parameterType="com.example.demo.entity.Model">
+        insert into models(model_name,model_des,type,user_id,storage_path,file_hash,source,created_at)
+        values(#{model_name},#{model_des},#{type},#{user_id},#{storage_path},#{file_hash},#{source},#{created_at})
+   </insert>
+
+    <insert id="preAdd">
+        insert into models(model_name,type,user_id,source)
+        values(#{model_name},#{type},#{user_id},#{source})
+    </insert>
+
+    <select id="query" resultType="com.example.demo.entity.Model">
+        SELECT * FROM models
+        WHERE ( is_public = false OR user_id = #{uid} )
+        <if test="name != null and name != ''">
+            AND model_name LIKE CONCAT('%', #{name}, '%')
+        </if>
+        <if test="type != null and type != ''">
+            AND type = #{type}
+        </if>
+        <if test="status != null and status != ''">
+            AND source = #{status}
+        </if>
+        ORDER BY created_at DESC
+    </select>
+
+    <update id="update" parameterType="com.example.demo.entity.Model">
+        UPDATE models
+        <set>
+            <if test="model_name != null">model_name = #{model_name},</if>
+            <if test="model_des != null">model_des = #{model_des},</if>
+            <if test="type != null">type = #{type},</if>
+        </set>
+            where user_id = #{user_id} and model_id = #{model_id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM models
+        WHERE model_id = #{model_id} AND user_id = #{user_id}
+    </delete>
+
+    <select id="queryById" resultType="com.example.demo.entity.Model">
+        SELECT * FROM models
+        WHERE model_id = #{model_id} AND user_id = #{user_id}
+        LIMIT 1
+    </select>
+
+    <select id="queryByName" resultType="Integer">
+        SELECT model_id FROM models
+        WHERE model_name = #{model_name}
+        LIMIT 1
+    </select>
+</mapper>

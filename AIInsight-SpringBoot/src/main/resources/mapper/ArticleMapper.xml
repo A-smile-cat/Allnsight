@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.ArticleMapper">
+
+    <insert id="saveArticle">
+        insert into articles(author_id,title,content_html,content_md,is_public,abstractt,article_date)
+        values(#{author_id},#{title},#{content_html},#{content_md},#{is_public},#{abstractt},#{article_date})
+    </insert>
+
+    <select id="queryById"  resultType="Articles">
+        select * from articles where article_id = #{article_id} and author_id = #{user_id}
+        LIMIT 1
+    </select>
+
+    <select id="queryByAId" resultType="Articles">
+        select * from articles where article_id = #{article_id}
+        LIMIT 1
+    </select>
+
+    <select id="query" resultType="Articles">
+        SELECT a.*, u.username
+        FROM articles a
+        JOIN user u ON a.author_id = u.id
+        WHERE a.author_id = #{uid}
+
+        <if test="author != null and author != ''">
+            AND u.username LIKE CONCAT('%', #{author}, '%')
+        </if>
+        <if test="title != null and title != ''">
+            AND a.title LIKE CONCAT('%', #{title}, '%')
+        </if>
+
+        UNION
+
+        SELECT a.*, u.username
+        FROM articles a
+        JOIN user u ON a.author_id = u.id
+        WHERE a.is_public = true
+        AND a.author_id != #{uid} <!-- 避免重复当前用户的文章 -->
+
+        <if test="author != null and author != ''">
+            AND u.username LIKE CONCAT('%', #{author}, '%')
+        </if>
+        <if test="title != null and title != ''">
+            AND a.title LIKE CONCAT('%', #{title}, '%')
+        </if>
+    </select>
+
+    <update id="updateStatus">
+        update articles set is_public = #{is_public} where article_id = #{article_id}
+    </update>
+
+    <update id="updateArticle">
+        update articles set title = #{title},content_html = #{content_html},content_md = #{content_md},abstractt = #{abstractt},is_public = #{is_public}
+        where article_id = #{article_id} and author_id = #{author_id}
+    </update>
+
+    <delete id="deleteArticle">
+        delete from articles where article_id = #{article_id} and author_id = #{user_id}
+    </delete>
+
+</mapper>

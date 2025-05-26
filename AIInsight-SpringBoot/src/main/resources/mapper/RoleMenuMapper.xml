@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.RoleMenuMapper">
+
+    <!-- 查询与指定 rid 关联的所有 RoleMenu 记录 -->
+    <select id="findAllByRid" resultType="com.example.demo.entity.RoleMenu">
+        SELECT *
+        FROM role_menu
+        WHERE rid = #{rid}
+    </select>
+
+    <insert id="add">
+        INSERT INTO role_menu(mid, rid) VALUES (#{mid}, #{rid})
+    </insert>
+
+    <delete id="deleteByRid">
+        DELETE FROM role_menu
+        WHERE rid = #{rid}
+    </delete>
+
+</mapper>
